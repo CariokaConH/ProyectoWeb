@@ -1,0 +1,248 @@
+/*
+    recuerda usar la URL DE VERCEL 
+
+    P A R A    L A  F O T O G R A F I A
+    /api/upload
+
+    en flutter algo asi, no esta comrpobado
+    ese endpoint sube la imagen y te devuelve una url, esa url es la que debes guardar en la base de datos,
+    solo al actualizar se sube la imagen 
+
+    ejecutas el endpoint
+
+    /api/clients/updatePicture
+    y le enviaas el ClientId, y el picture en string osea ya la url (que te genera el endpoint anterior) y listo
+
+    import 'package:image_picker/image_picker.dart';
+    import 'package:http/http.dart' as http;
+    import 'dart:io';
+
+    Future<void> subirImagen() async {
+    final picker = ImagePicker();
+
+    // 1. Seleccionar imagen
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile == null) return; // si no seleccionó nada, salir
+
+    final imageFile = File(pickedFile.path);
+
+    // 2. Crear la petición POST para subir la imagen
+    final uri = Uri.parse('https://tu_dominio/api/upload');
+    final request = http.MultipartRequest('POST', uri);
+
+    // Añadir la imagen al request (campo "file" igual que multer)
+    request.files.add(await http.MultipartFile.fromPath('file', imageFile.path));
+
+    // 3. Enviar la petición
+    final response = await request.send();
+
+    if (response.statusCode == 200) {
+        print('Imagen subida correctamente');
+        final responseBody = await response.stream.bytesToString();
+        print('Respuesta del backend: $responseBody');
+        // Aquí podrías extraer la URL desde responseBody si es JSON
+    } else {
+        print('Error al subir imagen: ${response.statusCode}');
+    }
+    }
+
+
+
+
+
+
+    Para obtener el carrito de un cliente 
+    http://localhost:3000/api/carts/9
+    [
+    {
+        "Name": "Económico Silla",
+        "ImageUrl": "https://picsum.photos/seed/3/150/150",
+        "CartItemId": 4,
+        "CartId": 2,
+        "ProductId": 11003,
+        "Quantity": 2,
+        "UnitPrice": 436.33,
+        "SubTotal": 872.66
+    },
+    {
+        "Name": "Producto nuevo",
+        "ImageUrl": "https://ejemplo.com/img.png",
+        "CartItemId": 5,
+        "CartId": 2,
+        "ProductId": 11001,
+        "Quantity": 6,
+        "UnitPrice": 29.99,
+        "SubTotal": 179.94
+    }
+]
+    
+
+
+
+
+    Para agregar un item al carrito:
+    http://localhost:3000/api/carts
+    con el metodo POST
+    el body sera un json con la siguiente estructura:
+    esta automatizado para que si no hay carrito lo cree
+    {
+    "clientId": 9,
+    "productId": 11045,
+    "quantity": 2
+    }
+
+
+
+    para actuualizar el un item del carrito:
+    http://localhost:3000/api/carts
+    con el metodo PUT
+    el body sera un json con la siguiente estructura:
+    {
+        "cartID": 6,
+        "productId": 11045,
+        "quantity": 10
+    }
+
+
+
+
+
+
+
+
+    Para hacer la compra de los items del carrito:
+    http://localhost:3000/api/carts/convert
+    con el un json con la siguiente estructura:
+    {
+  "cartID": 6
+    }
+    te devolvera esto si fue exitoso;
+        {
+        "resultado": "Orden creada correctamente.",
+        "OrderId": 106
+    }
+
+    si no fue exitoso te devolvera esto:
+    {
+        "error": "Error al convertir el carrito a orden."
+    }
+
+    Para eliminar un item del carrito:
+    http://localhost:3000/api/carts/13/11009
+    en donde el primer 13 es el id del carrito y el 11009 es el id del producto
+    te devolvera esto si fue exitoso;
+    { Message: 'Producto eliminado correctamente' }
+    si no fue exitoso te devolvera esto:
+    { Error: 'El producto no existe en el carrito' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    para crar cliente metodo post /api/clients
+    {
+        "cedula": "0104030405",
+        "email": "ejemplo@correo.com",
+        "password": "MiClaveSegura123",
+        "firstName": "Juan",
+        "lastName": "Pérez",
+        "address": "Av. Siempre Viva 742",
+        "phone": "0987654321"
+    }
+
+    para actualizar cliente metodo put /api/clients
+    
+    {
+        "clientId": 12,
+        "cedula": "1234567890",
+        "email": "cliente@email.com",
+        "firstName": "Juan",
+        "lastName": "Pérez",
+        "address": "Av. Siempre Viva 742",
+        "phone": "0987654321"
+    }   
+
+
+    para cambiar la contraseña del cliente metodo put /api/clients/changePassword
+    {
+        "userId": 42,
+        "currentPassword": "MiClaveActual123",
+        "newPassword": "NuevaClaveSegura456"
+    }
+    si esta bien te devolvera esto:
+    {
+        "Message": "Contraseña actualizada correctamente"
+    }
+
+    si no esta bien te devolvera esto:
+    {
+        "Error": "Contraseña actual incorrecta"
+    }
+
+
+
+
+    para eliminar cliente metodo delete /api/clients
+
+
+
+
+    para recuperar la contraseña 
+    http://localhost:3000/api/clients/recoverPassword
+    con el metodo POST
+    el body sera un json con la siguiente estructura:
+    {
+        "email": "clisssente@email.com"
+    }
+    te devolvera esto si fue exitoso;
+    {
+        "Message": "Contraseña restablecida correctamente",
+        "TemporaryPassword": "68A2C8A9"
+    }
+    si no fue exitoso te devolvera esto:
+    {
+        "Error": "No se encontró un cliente con el correo electrónico proporcionado."
+    }
+
+
+
+
+
+
+    para obtener el detalle de una orden
+    api/orders/112
+    112 es el id de la orden
+    te devolvera esto:
+    [
+    {
+        "Name": "Moderno Camiseta",
+        "ImageUrl": "https://picsum.photos/seed/7/150/150",
+        "Price": 407.49,
+        "SubTotal": 407.49,
+        "OrderDetailId": 61,
+        "OrderId": 112,
+        "ProductId": 11007,
+        "Quantity": 1,
+        "UnitPrice": 407.49
+    },
+    {
+        "Name": "Clásico Cámara",
+        "ImageUrl": "https://picsum.photos/seed/9/150/150",
+        "Price": 352.64,
+        "SubTotal": 352.64,
+        "OrderDetailId": 62,
+        "OrderId": 112,
+        "ProductId": 11009,
+        "Quantity": 1,
+        "UnitPrice": 352.64
+    }
+]
+*/

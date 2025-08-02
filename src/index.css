@@ -1,0 +1,79 @@
+:root {
+  color-scheme: light dark;
+
+  --primary-color: #2E3A2F; 
+  --secondary-color: #F5F7F4;     
+  --accent-color: #379d3a;          
+  --accent-light: #81C784;          
+  --background-light: #FFFFFF;
+  --text-primary: #1C1C1C;       
+  --text-secondary: #5F5F5F;     
+  --border-color: #DDE2DC;       
+  --shadow-color: rgba(0, 0, 0, 0.05);
+
+  --primary-color-dark: #F5F7F4;
+  --secondary-color-dark: #111511;
+  --accent-color-dark: #73d078;
+  --accent-light-dark: #A5D6A7;
+  --background-dark: #111311;   
+  --text-primary-dark: #F0F3EF;
+  --text-secondary-dark: #AAB1A9;
+  --border-color-dark: #3C4A3E;
+  --shadow-color-dark: rgba(255, 255, 255, 0.05);
+
+
+  --navbar-bg: #FFFFFF;
+  --navbar-bg-dark: #121712;
+  --navbar-border: rgba(221, 226, 220, 0.2);
+  --navbar-shadow: rgba(0, 0, 0, 0.04);
+  --navbar-text: #2E3A2F;
+  --navbar-text-dark: #F5F7F4;
+  --navbar-hover: #4CAF50;
+  --navbar-active: #81C784;
+}
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color: var(--primary-color-dark);
+    --secondary-color: var(--secondary-color-dark);
+    --accent-color: var(--accent-color-dark);
+    --accent-light: var(--accent-light-dark);
+    --background-light: var(--background-dark);
+    --text-primary: var(--text-primary-dark);
+    --text-secondary: var(--text-secondary-dark);
+    --border-color: var(--border-color-dark);
+    --shadow-color: var(--shadow-color-dark);
+    --navbar-bg: var(--navbar-bg-dark);
+    --navbar-text: var(--navbar-text-dark);
+  }
+}
+
+body {
+  background-color: var(--secondary-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.app-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
